@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-card review-shell">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Spaced repetition</p>
+            <h1>Review session</h1>
+        </div>
+    </div>
+
+    {% if review_view.card %}
+        <article class="review-card" data-flip-card>
+            <div class="review-card-face review-front">
+                <p class="eyebrow">Question</p>
+                <h2>{{ review_view.card["question"] }}</h2>
+                <button class="button button-secondary" type="button" data-flip-trigger>Show answer</button>
+            </div>
+            <div class="review-card-face review-back">
+                <p class="eyebrow">Answer</p>
+                <h2>{{ review_view.card["answer"] }}</h2>
+                <p>{{ review_view.card["explanation"] }}</p>
+                <div class="rating-group">
+                    <form action="{{ url_for('web.submit_review', card_id=review_view.card['id']) }}" method="post">
+                        <input type="hidden" name="deck_id" value="{{ review_view.deck_id or '' }}">
+                        <input type="hidden" name="rating" value="2">
+                        <button class="button button-danger" type="submit">Again</button>
+                    </form>
+                    <form action="{{ url_for('web.submit_review', card_id=review_view.card['id']) }}" method="post">
+                        <input type="hidden" name="deck_id" value="{{ review_view.deck_id or '' }}">
+                        <input type="hidden" name="rating" value="3">
+                        <button class="button button-secondary" type="submit">Hard</button>
+                    </form>
+                    <form action="{{ url_for('web.submit_review', card_id=review_view.card['id']) }}" method="post">
+                        <input type="hidden" name="deck_id" value="{{ review_view.deck_id or '' }}">
+                        <input type="hidden" name="rating" value="4">
+                        <button class="button button-primary" type="submit">Good</button>
+                    </form>
+                    <form action="{{ url_for('web.submit_review', card_id=review_view.card['id']) }}" method="post">
+                        <input type="hidden" name="deck_id" value="{{ review_view.deck_id or '' }}">
+                        <input type="hidden" name="rating" value="5">
+                        <button class="button button-success" type="submit">Easy</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+    {% else %}
+        <div class="empty-state">
+            <h3>No cards due right now</h3>
+            <p>You are caught up. Upload another PDF or come back when more reviews are scheduled.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

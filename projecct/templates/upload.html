@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-card narrow">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">PDF to deck</p>
+            <h1>Create a new flashcard deck</h1>
+        </div>
+    </div>
+
+    <form class="form-grid" action="{{ url_for('web.upload') }}" method="post" enctype="multipart/form-data">
+        <label>
+            Deck title
+            <input type="text" name="title" placeholder="Quadratic Equations - Chapter 3">
+        </label>
+
+        <label>
+            Subject
+            <input type="text" name="subject" placeholder="Math, History, Biology...">
+        </label>
+
+        <label>
+            AI provider
+            <select name="provider">
+                <option value="auto">Auto detect</option>
+                <option value="groq">Groq</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="offline">Offline fallback only</option>
+            </select>
+        </label>
+
+        <label class="file-field">
+            Choose PDF
+            <input type="file" name="pdf" accept=".pdf,application/pdf" required>
+        </label>
+
+        <button class="button button-primary" type="submit">Build deck</button>
+    </form>
+</section>
+{% endblock %}

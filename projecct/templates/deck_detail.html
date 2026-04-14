@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-card">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Deck detail</p>
+            <h1>{{ deck_view.deck["title"] }}</h1>
+            <p>{{ deck_view.deck["subject"] or "General study deck" }}</p>
+        </div>
+        <div class="hero-actions">
+            <a class="button button-primary" href="{{ url_for('web.review', deck_id=deck_view.deck['id']) }}">Review this deck</a>
+            <form action="{{ url_for('web.remove_deck', deck_id=deck_view.deck['id']) }}" method="post">
+                <button class="button button-danger" type="submit">Delete deck</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="hero-panel compact">
+        <div class="metric-card">
+            <span>Total cards</span>
+            <strong>{{ deck_view.summary.card_count }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Needs work</span>
+            <strong>{{ deck_view.summary.due_count }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Mastered</span>
+            <strong>{{ deck_view.summary.mastered_count }}</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-card">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Flashcards</p>
+            <h2>Card set</h2>
+        </div>
+    </div>
+
+    <div class="card-list">
+        {% for card in deck_view.cards %}
+            <article class="flashcard-preview">
+                <div class="flashcard-header">
+                    <span class="pill">{{ card["card_type"].replace("_", " ") }}</span>
+                    <span>{{ card["mastery_score"] }}% mastery</span>
+                </div>
+                <h3>{{ card["question"] }}</h3>
+                <p>{{ card["answer"] }}</p>
+                {% if card["explanation"] %}
+                    <small>{{ card["explanation"] }}</small>
+                {% endif %}
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

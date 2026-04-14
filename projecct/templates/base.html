@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Flashcard Engine</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="page-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('web.home') }}">
+                <span class="brand-mark">F</span>
+                <div>
+                    <strong>The Flashcard Engine</strong>
+                    <small>Retention over cramming</small>
+                </div>
+            </a>
+            <nav class="nav-links">
+                <a href="{{ url_for('web.home') }}">Dashboard</a>
+                <a href="{{ url_for('web.upload') }}">New Deck</a>
+                <a href="{{ url_for('web.decks') }}">All Decks</a>
+                <a href="{{ url_for('web.review') }}">Review Now</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <section class="flash-stack">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </section>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

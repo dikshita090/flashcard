@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="section-card">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Deck library</p>
+            <h1>Browse your study decks</h1>
+        </div>
+    </div>
+
+    <form class="search-bar" method="get" action="{{ url_for('web.decks') }}">
+        <input type="text" name="q" value="{{ deck_view.query }}" placeholder="Search by title or subject">
+        <button class="button button-secondary" type="submit">Search</button>
+    </form>
+
+    {% if deck_view.decks %}
+        <div class="deck-grid">
+            {% for deck in deck_view.decks %}
+                <article class="deck-card">
+                    <div class="deck-card-top">
+                        <div>
+                            <h3>{{ deck["title"] }}</h3>
+                            <p>{{ deck["subject"] or "General study deck" }}</p>
+                        </div>
+                        <span class="pill">{{ deck["card_count"] or 0 }} cards</span>
+                    </div>
+                    <div class="deck-meta">
+                        <span>{{ deck["due_count"] or 0 }} due now</span>
+                        <span>{{ deck["mastery_average"] or 0 }}% mastery</span>
+                    </div>
+                    <a class="text-link" href="{{ url_for('web.deck_detail', deck_id=deck['id']) }}">Open deck</a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No matching decks</h3>
+            <p>Try a different search, or create a new deck from a PDF.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

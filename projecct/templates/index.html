@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+    <div>
+        <p class="eyebrow">Smart revision, built from your PDFs</p>
+        <h1>Turn chapters and class notes into practice-ready flashcards.</h1>
+        <p class="hero-copy">
+            Upload a PDF, generate a rich deck, and review with spaced repetition that keeps weak cards in circulation and lets mastered cards fade naturally.
+        </p>
+        <div class="hero-actions">
+            <a class="button button-primary" href="{{ url_for('web.upload') }}">Create a deck</a>
+            <a class="button button-secondary" href="{{ url_for('web.review') }}">Start reviewing</a>
+        </div>
+    </div>
+    <div class="hero-panel">
+        <div class="metric-card">
+            <span>Total decks</span>
+            <strong>{{ dashboard.stats.deck_count }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Total cards</span>
+            <strong>{{ dashboard.stats.card_count }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Due now</span>
+            <strong>{{ dashboard.stats.due_count }}</strong>
+        </div>
+        <div class="metric-card">
+            <span>Average mastery</span>
+            <strong>{{ dashboard.stats.mastery }}%</strong>
+        </div>
+    </div>
+</section>
+
+<section class="section-card">
+    <div class="section-header">
+        <div>
+            <p class="eyebrow">Recent decks</p>
+            <h2>Pick up where you left off</h2>
+        </div>
+        <a class="text-link" href="{{ url_for('web.decks') }}">See all decks</a>
+    </div>
+
+    {% if dashboard.recent_decks %}
+        <div class="deck-grid">
+            {% for deck in dashboard.recent_decks %}
+                <article class="deck-card">
+                    <div class="deck-card-top">
+                        <div>
+                            <h3>{{ deck["title"] }}</h3>
+                            <p>{{ deck["subject"] or "General study deck" }}</p>
+                        </div>
+                        <span class="pill">{{ deck["card_count"] or 0 }} cards</span>
+                    </div>
+                    <div class="deck-meta">
+                        <span>{{ deck["due_count"] or 0 }} due</span>
+                        <span>{{ deck["mastery_average"] or 0 }}% mastery</span>
+                    </div>
+                    <a class="text-link" href="{{ url_for('web.deck_detail', deck_id=deck['id']) }}">Open deck</a>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No decks yet</h3>
+            <p>Upload your first PDF and the engine will build a review deck for you.</p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}
